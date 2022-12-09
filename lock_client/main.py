@@ -4,11 +4,11 @@
 from urllib import request, response
 import requests
 from kivymd.app import MDApp
+from kivy.core.clipboard import Clipboard
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.screenmanager import Screen
-import pyperclip
 import pyotp
 import os
 s = requests.Session()
@@ -17,7 +17,7 @@ kv = """
 <Password_screen>:
     MDTextField:
         id: password
-        hint_text: 'Enter you password'
+        hint_text: 'password'
         helper_text_mode: "on_focus"
         pos_hint: {'center_x': 0.5, 'center_y': 0.4}
         size_hint_x: None
@@ -26,7 +26,7 @@ kv = """
         password: True
     MDTextField:
         id: username
-        hint_text: 'Enter you username'
+        hint_text: 'username'
         helper_text_mode: "on_focus"
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         size_hint_x: None
@@ -35,7 +35,7 @@ kv = """
         required: True
     MDTextField:
         id: host_url
-        hint_text: 'Enter host_url(optional)'
+        hint_text: 'host_url(optional)'
         helper_text_mode: "on_focus"
         pos_hint: {'center_x': 0.5, 'center_y': 0.6}
         size_hint_x: None
@@ -212,7 +212,7 @@ kv = """
             root.reset()
     MDRectangleFlatButton:
         id: back
-        text: 'Back to dashboard'
+        text: 'Back'
         pos_hint: {'center_x': 0.4, 'center_y': 0.5}
         on_press:
             root.back()
@@ -251,7 +251,7 @@ kv = """
         password: True
     CheckBox:
         id: admin
-        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        pos_hint: {'center_x': 0.4, 'center_y': 0.5}
         size_hint_x: .10
         size_hint_y: .10
     MDLabel:
@@ -266,7 +266,7 @@ kv = """
             root.add()
     MDRectangleFlatButton:
         id: back
-        text: 'Back to dashboard'
+        text: 'Back'
         pos_hint: {'center_x': 0.4, 'center_y': 0.4}
         on_press:
             root.back()
@@ -301,7 +301,7 @@ kv = """
             root.remove()
     MDRectangleFlatButton:
         id: back
-        text: 'Back to dashboard'
+        text: 'Back'
         pos_hint: {'center_x': 0.4, 'center_y': 0.4}
         on_press:
             root.back()
@@ -331,7 +331,7 @@ kv = """
             root.reset()
     MDRectangleFlatButton:
         id: back
-        text: 'Back to dashboard'
+        text: 'Back'
         pos_hint: {'center_x': 0.4, 'center_y': 0.4}
         on_press:
             root.back()
@@ -353,7 +353,7 @@ class Password_screen(Screen):
                 label.text = "wrong password or username"
             elif url == host_url+"/users/register_mfa":
                 label = self.ids.show
-                label.text = "Login Sucess"
+                # label.text = "Login Sucess"
                 # content = s.get(url, verify=False).content
                 # print(content)
                 self.manager.current = 'totp_register'
@@ -425,7 +425,7 @@ class Totp_register(Screen):
         offset = r.content.decode().find(': ')
         secret = r.content.decode()[offset+2:offset+18]
         print(secret)
-        pyperclip.copy(secret)
+        Clipboard.copy(secret)
         self.ids.totp_secret.text = secret
         self.ids.totp_code.text = pyotp.TOTP(secret).now()
 
