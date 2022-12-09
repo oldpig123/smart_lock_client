@@ -359,7 +359,7 @@ class Password_screen(Screen):
                 self.manager.current = 'totp_register'
             else:
                 label = self.ids.show
-                label.text = "Login Sucess"
+                # label.text = "Login Sucess"
                 r = s.get(url, verify=False)
                 print(r.content)
                 self.manager.current = 'totp_login'
